@@ -1,0 +1,6 @@
+admin/node_modules
+admin/.env
+user/node_modules
+user/.env
+learning/node_modules
+learning/.env

@@ -1,0 +1,68 @@
+
+services:
+ 
+  # rabbitmq:
+  #   image: rabbitmq:alpine
+  #   container_name: rabbitmq
+  #   ports:
+  #     - '5672:5672'
+
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: ./user
+    container_name: user
+    ports:
+      - "3003:3003"
+    restart: always
+    # depends_on:
+    #   - "nosql-db"
+    #   - "rabbitmq"
+    volumes:
+      - .:/app
+      - /app/user/node_modules
+
+    # env_file:
+    #   - ./products/.env.dev
+  admin:
+    build:
+      dockerfile: Dockerfile
+      context: ./admin
+    container_name: admin
+    ports:
+      - "3001:3001"
+    restart: always
+    # depends_on:
+    #   - "nosql-db"
+    #   - "rabbitmq"
+    volumes:
+      - .:/app
+      - /app/admin/node_modules
+    # env_file:
+    #   - ./shopping/.env.dev
+  learning:
+    build:
+      dockerfile: Dockerfile
+      context: ./learning
+    container_name: learning
+    ports:
+      - "3002:3002"
+    restart: always
+    # depends_on:do 
+    #   - "nosql-db"
+    #   - "rabbitmq"
+    volumes:
+      - .:/app/
+      - /app/learning/node_modules
+    # env_file:
+    #   - ./customer/.env.dev
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - user
+      - admin
+      - learning
+    ports:
+      - 80:80
